@@ -38,6 +38,9 @@
         <activity
             android:name="com.codepath.apps.restclienttemplate.TimelineActivity"
             />
+        <activity
+            android:name="com.codepath.apps.restclienttemplate.ComposeActivity"
+            />
     </application>
 
 </manifest>
