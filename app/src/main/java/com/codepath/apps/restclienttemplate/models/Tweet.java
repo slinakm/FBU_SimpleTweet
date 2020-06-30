@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,10 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Parcel
 public class Tweet {
     public String body;
     public String createdAt;
     public User user;
+
+    public boolean containsMedia;
+    public String mediaURL;
+
+    public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
@@ -23,6 +30,14 @@ public class Tweet {
         tweet.setCreatedAt(jsonObject.getString("created_at"));
         tweet.setUser(User.fromJson(jsonObject.getJSONObject("user")));
 
+        tweet.setContainsMedia(false);
+        JSONObject entities = jsonObject.getJSONObject("entities");
+        if (entities.has("media")) {
+            tweet.setContainsMedia(true);
+            JSONArray media = entities.getJSONArray("media");
+            JSONObject mediaObject = (JSONObject) media.get(0);
+            tweet.setMediaURL(mediaObject.getString("media_url_https"));
+        }
         return tweet;
     }
 
@@ -55,6 +70,14 @@ public class Tweet {
         return getRelativeTimeAgo(createdAt);
     }
 
+    public void setContainsMedia(boolean containsMedia) {
+        this.containsMedia = containsMedia;
+    }
+
+    public void setMediaURL(String mediaURL) {
+        this.mediaURL = mediaURL;
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     public String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
@@ -75,5 +98,13 @@ public class Tweet {
 
     public User getUser() {
         return user;
+    }
+
+    public boolean containsMedia() {
+        return containsMedia;
+    }
+
+    public String getMediaURL() {
+        return mediaURL;
     }
 }
