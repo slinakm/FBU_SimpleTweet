@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Parcel
@@ -35,6 +37,14 @@ public class User implements Serializable {
         user.setProfileImageURL(jsonObject.getString("profile_image_url_https"));
         user.setId(jsonObject.getLong("id"));
         return user;
+    }
+
+    public static List<User> fromJsonTweetArray(List<Tweet> tweetsFromNetwork) {
+        List<User> userList = new ArrayList<>();
+        for (Tweet tweet: tweetsFromNetwork) {
+            userList.add(tweet.getUser());
+        }
+        return userList;
     }
 
     public void setName(String name) {

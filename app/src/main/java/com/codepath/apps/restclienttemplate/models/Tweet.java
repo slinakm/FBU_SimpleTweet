@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@Entity
+@Entity(foreignKeys = @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "userId"))
 @Parcel
 public class Tweet implements Serializable {
 
@@ -52,7 +53,10 @@ public class Tweet implements Serializable {
         tweet.setBody(jsonObject.getString("text"));
         tweet.setCreatedAt(jsonObject.getString("created_at"));
         tweet.setId(jsonObject.getLong("id"));
-        tweet.setUser(User.fromJson(jsonObject.getJSONObject("user")));
+
+        User user = User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.setUser(user);
+        tweet.setUserId(user.getId());
 
         tweet.setContainsMedia(false);
         JSONObject entities = jsonObject.getJSONObject("entities");
@@ -112,12 +116,22 @@ public class Tweet implements Serializable {
         return relativeDate;
     }
 
-    public long getId() {
-        return id;
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
+
+    public long getUserId() {
+        return userId;
+    }
+
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getBody() {
