@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -62,6 +63,8 @@ public class ComposeActivity extends AppCompatActivity {
                 Toast.makeText(context, tweetContent,
                         Toast.LENGTH_LONG).show();
 
+                final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
+                pb.setVisibility(ProgressBar.VISIBLE);
                 // Make an API call to Twitter to publish the tweet and return tweet to parent
                 client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
                     @Override
@@ -75,6 +78,7 @@ public class ComposeActivity extends AppCompatActivity {
                             Intent intent = new Intent();
                             intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
                             setResult(RESULT_OK, intent);
+                            pb.setVisibility(ProgressBar.INVISIBLE);
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
