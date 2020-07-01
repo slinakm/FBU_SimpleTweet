@@ -1,12 +1,12 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
@@ -51,8 +57,17 @@ public class TimelineActivity extends AppCompatActivity {
         tweetList = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweetList);
 
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager rvLinearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(rvLinearLayoutManager);
         rvTweets.setAdapter(adapter);
+        final EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener
+                = new EndlessRecyclerViewScrollListener(rvLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextData(page);
+            }
+        };
+        rvTweets.addOnScrollListener(endlessRecyclerViewScrollListener);
 
         // Set up Swipe Container
         swipeContainer = findViewById(R.id.swipeContainer);
@@ -70,6 +85,38 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
 
         populateHomeTimeline();
+    }
+
+    private void loadNextData(final int position) {
+        final ProgressBar pb = findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.VISIBLE);
+
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+
+        client.getNextPageOfTweets(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "onSuccess loadNextData: " + json.toString());
+                pb.setVisibility(ProgressBar.INVISIBLE);
+                try {
+                    List<Tweet> tweets = Tweet.fromJsonArray(json.jsonArray);
+                    adapter.addAll(tweets);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess loadNextData: Json Exception", e);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                pb.setVisibility(ProgressBar.INVISIBLE);
+                Log.e(TAG, "onFailure loadNextData: " + response, throwable);
+            }
+        }, tweetList.get(tweetList.size()-1).getId());
     }
 
     @Override
@@ -108,13 +155,14 @@ public class TimelineActivity extends AppCompatActivity {
         client.getHomeTimelime(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess populateHomeTimeline" + json.toString());
+                Log.i(TAG, "onSuccess populateHomeTimeline: " + json.toString());
                 try {
                     adapter.clear();
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
                     swipeContainer.setRefreshing(false);
                     pb.setVisibility(ProgressBar.INVISIBLE);
                 } catch (JSONException e) {
+                    pb.setVisibility(ProgressBar.INVISIBLE);
                     Log.e(TAG, "onSuccess populateHomeTimeline: Json Exception", e);
                     e.printStackTrace();
                 }
@@ -122,7 +170,8 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.e(TAG, "onFailure populateHomeTimeline" + response, throwable);
+                pb.setVisibility(ProgressBar.INVISIBLE);
+                Log.e(TAG, "onFailure populateHomeTimeline: " + response, throwable);
             }
         });
     }

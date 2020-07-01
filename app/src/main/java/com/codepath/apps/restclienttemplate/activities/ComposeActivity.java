@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -60,11 +63,11 @@ public class ComposeActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     return;
                 }
-                Toast.makeText(context, tweetContent,
-                        Toast.LENGTH_LONG).show();
 
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
                 pb.setVisibility(ProgressBar.VISIBLE);
+                Toast.makeText(context, tweetContent,
+                        Toast.LENGTH_LONG).show();
                 // Make an API call to Twitter to publish the tweet and return tweet to parent
                 client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
                     @Override
@@ -87,6 +90,7 @@ public class ComposeActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        pb.setVisibility(ProgressBar.INVISIBLE);
                         Log.e(TAG, "onFailure to publish tweet ", throwable);
                     }
                 });

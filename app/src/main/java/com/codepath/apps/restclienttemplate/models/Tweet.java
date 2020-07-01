@@ -19,6 +19,8 @@ public class Tweet {
     public String createdAt;
     public User user;
 
+    public long id;
+
     public boolean containsMedia;
     public String mediaURL;
 
@@ -28,6 +30,7 @@ public class Tweet {
         Tweet tweet = new Tweet();
         tweet.setBody(jsonObject.getString("text"));
         tweet.setCreatedAt(jsonObject.getString("created_at"));
+        tweet.setId(jsonObject.getLong("id"));
         tweet.setUser(User.fromJson(jsonObject.getJSONObject("user")));
 
         tweet.setContainsMedia(false);
@@ -62,14 +65,6 @@ public class Tweet {
         this.user = user;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public String getCreatedAt() {
-        return getRelativeTimeAgo(createdAt);
-    }
-
     public void setContainsMedia(boolean containsMedia) {
         this.containsMedia = containsMedia;
     }
@@ -94,6 +89,22 @@ public class Tweet {
         }
 
         return relativeDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public String getCreatedAt() {
+        return getRelativeTimeAgo(createdAt);
     }
 
     public User getUser() {
