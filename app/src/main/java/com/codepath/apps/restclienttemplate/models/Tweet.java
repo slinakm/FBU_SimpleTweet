@@ -2,27 +2,48 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.text.format.DateUtils;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Entity
 @Parcel
-public class Tweet {
-    public String body;
-    public String createdAt;
-    public User user;
+public class Tweet implements Serializable {
 
+    @ColumnInfo
+    @PrimaryKey
     public long id;
 
+    @ColumnInfo
+    public String body;
+
+    @ColumnInfo
+    public String createdAt;
+
+    @ColumnInfo
     public boolean containsMedia;
+
+    @ColumnInfo
     public String mediaURL;
+
+    @ColumnInfo
+    public long userId;
+
+    @Ignore
+    public User user;
 
     public Tweet() {}
 

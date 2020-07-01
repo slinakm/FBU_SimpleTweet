@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,16 +24,27 @@ import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import org.apache.commons.io.FileUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
+
+    public final boolean TESTING = true;
+    public final boolean SAVINGFORTESTING = true;
 
     private final int REQUEST_CODE = 20;
     public static final String TAG = "TimelineActivity";
@@ -64,7 +76,11 @@ public class TimelineActivity extends AppCompatActivity {
                 = new EndlessRecyclerViewScrollListener(rvLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData(page);
+                if (TESTING) {
+                    loadMoreItems();
+                } else {
+                    loadNextData(page);
+                }
             }
         };
         rvTweets.addOnScrollListener(endlessRecyclerViewScrollListener);
@@ -76,6 +92,11 @@ public class TimelineActivity extends AppCompatActivity {
             public void onRefresh() {
                 Log.i(TAG, "onRefresh: fetching new data");
                 populateHomeTimeline();
+
+                if (!TESTING
+                        && SAVINGFORTESTING) {
+                    saveItems();
+                }
             }
         });
         // Configure the refreshing colors
@@ -120,6 +141,15 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!TESTING
+                && SAVINGFORTESTING) {
+            saveItems();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -152,27 +182,98 @@ public class TimelineActivity extends AppCompatActivity {
         final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
         pb.setVisibility(ProgressBar.VISIBLE);
 
-        client.getHomeTimelime(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess populateHomeTimeline: " + json.toString());
-                try {
-                    adapter.clear();
-                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
-                    swipeContainer.setRefreshing(false);
-                    pb.setVisibility(ProgressBar.INVISIBLE);
-                } catch (JSONException e) {
-                    pb.setVisibility(ProgressBar.INVISIBLE);
-                    Log.e(TAG, "onSuccess populateHomeTimeline: Json Exception", e);
-                    e.printStackTrace();
-                }
-            }
+       if (TESTING) {
+           adapter.clear();
+           loadItems();
+           swipeContainer.setRefreshing(false);
+           pb.setVisibility(ProgressBar.INVISIBLE);
+           Log.d(TAG, "populateHomeTimeline: Testing  " + tweetList.toString());
+       } else {
+           client.getHomeTimelime(new JsonHttpResponseHandler() {
+               @Override
+               public void onSuccess(int statusCode, Headers headers, JSON json) {
+                   Log.i(TAG, "onSuccess populateHomeTimeline: " + json.toString());
+                   try {
+                       adapter.clear();
+                       adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                       swipeContainer.setRefreshing(false);
+                       pb.setVisibility(ProgressBar.INVISIBLE);
+                   } catch (JSONException e) {
+                       pb.setVisibility(ProgressBar.INVISIBLE);
+                       Log.e(TAG, "onSuccess populateHomeTimeline: Json Exception", e);
+                       e.printStackTrace();
+                   }
+               }
 
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                pb.setVisibility(ProgressBar.INVISIBLE);
-                Log.e(TAG, "onFailure populateHomeTimeline: " + response, throwable);
-            }
-        });
+               @Override
+               public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                   pb.setVisibility(ProgressBar.INVISIBLE);
+                   Log.e(TAG, "onFailure populateHomeTimeline: " + response, throwable);
+               }
+           });
+       }
+    }
+
+    private File getDataFile() {
+        return new File(getFilesDir(), "data.txt");
+    }
+
+
+    // This function will load items by reading every line of the data file
+    private void loadItems() {
+        try {
+            //Reading of object in a file
+            FileInputStream file = new FileInputStream(getDataFile());
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            List<Tweet> tempList = (List<Tweet>) in.readObject();
+
+            in.close();
+            file.close();
+
+            tweetList.clear();
+            tweetList.addAll(tempList);
+        } catch (IOException | ClassNotFoundException e) {
+            Log.e("MainActivity", "Error reading items", e);
+            tweetList.clear();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    // This function saves items by writing them into the data file
+    private void saveItems() {
+        try {
+            //Saving of object in a file
+            FileOutputStream file = new FileOutputStream(getDataFile());
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            out.writeObject(tweetList);
+
+            out.close();
+            file.close();
+        } catch (IOException e) {
+            Log.e("MainActivity", "Error writing items", e); }
+    }
+
+    private void loadMoreItems() {
+        try {
+
+            //Reading of object in a file
+            FileInputStream file = new FileInputStream(getDataFile());
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            List<Tweet> tempList = (List<Tweet>) in.readObject();
+
+            in.close();
+            file.close();
+
+            tweetList.addAll(tempList);
+            adapter.notifyItemRangeInserted(tweetList.size()-tempList.size()-1,
+                    tempList.size());
+        } catch (IOException | ClassNotFoundException e) {
+            Log.e(TAG, "Error reading items in load more items", e);
+            tweetList.clear();
+            adapter.notifyDataSetChanged();
+        }
     }
 }
