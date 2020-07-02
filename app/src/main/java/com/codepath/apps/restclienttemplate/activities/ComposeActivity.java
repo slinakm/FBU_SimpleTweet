@@ -62,7 +62,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra(TweetsAdapter.INTENT_USER_COMPOSE)) {
             String userScreenName = getIntent().getStringExtra(TweetsAdapter.INTENT_USER_COMPOSE);
-            textInputLayout.setPrefixText(userScreenName);
+            etCompose.setText(userScreenName);
         }
 
         // Set button click for tweeting

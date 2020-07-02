@@ -51,7 +51,7 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public final boolean TESTING = true;
-    public final boolean SAVINGFORTESTING = true;
+    public final boolean SAVINGFORTESTING = false;
 
     private final int REQUEST_CODE = 20;
     public static final String TAG = "TimelineActivity";

@@ -61,7 +61,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
-        tools:text="@tools:sample/lorem[50]" />
+        tools:text="@tools:sample/lorem[50]"
+        android:autoLink="all"
+        android:linksClickable="true"/>
 
 
     <ImageView
@@ -80,6 +82,7 @@
 '<ImageView
     android:id="@+id/ivReply"
     android:clickable="true"
+    android:src="@drawable/ic_reply"
     android:layout_width="15dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp"
@@ -94,6 +97,7 @@
 <ImageView
     android:id="@+id/ivRetweet"
     android:clickable="true"
+    android:src="@drawable/ic_retweet"
     android:layout_width="15dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="30dp"
@@ -107,6 +111,7 @@
 <ImageView
     android:id="@+id/ivLike"
     android:clickable="true"
+    android:src="@drawable/ic_heart"
     android:layout_width="15dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="30dp"

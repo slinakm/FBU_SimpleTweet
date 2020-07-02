@@ -46,6 +46,9 @@ public class Tweet implements Serializable {
     @ColumnInfo
     public boolean favorited;
 
+    @ColumnInfo
+    public boolean retweeted;
+
     @Ignore
     public User user;
 
@@ -56,12 +59,15 @@ public class Tweet implements Serializable {
         tweet.setBody(jsonObject.getString("text"));
         tweet.setCreatedAt(jsonObject.getString("created_at"));
         tweet.setId(jsonObject.getLong("id"));
+        tweet.setFavorited(jsonObject.getBoolean("favorited"));
+        tweet.setFavorited(jsonObject.getBoolean("retweeted"));
 
         User user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.setUser(user);
         tweet.setUserId(user.getId());
 
         tweet.setContainsMedia(false);
+        tweet.setMediaURL("empty");
         JSONObject entities = jsonObject.getJSONObject("entities");
         if (entities.has("media")) {
             tweet.setContainsMedia(true);
@@ -134,6 +140,14 @@ public class Tweet implements Serializable {
 
     public void setFavorited(boolean favorited) {
         this.favorited = favorited;
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
     }
 
     public void setId(long id) {
