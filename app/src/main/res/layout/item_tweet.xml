@@ -19,15 +19,36 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvScreenName"
-        android:layout_width="63dp"
-        android:layout_height="16dp"
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="#000000"
+        android:textColor="@color/primary_text"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Name" />
+
+    <TextView
+        android:id="@+id/tvScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintBottom_toTopOf="@+id/tvBody"
+        app:layout_constraintStart_toEndOf="@+id/tvName"
+        tools:text="ScreenName" />
+
+    <TextView
+        android:id="@+id/tvRelativeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/medium_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvBody"
+        app:layout_constraintStart_toEndOf="@+id/tvScreenName"
+        tools:text="9 hours ago" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -36,21 +57,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
+        android:textColor="@color/primary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/tvScreenName"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
         tools:text="@tools:sample/lorem[50]" />
 
-    <TextView
-        android:id="@+id/tvRelativeTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        tools:text="9 hours ago"
-        android:textColor="@android:color/tertiary_text_light"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvBody"
-        app:layout_constraintStart_toEndOf="@+id/tvScreenName" />
 
     <ImageView
         android:id="@+id/media"
@@ -64,5 +76,39 @@
         app:layout_constraintStart_toStartOf="@+id/tvBody"
         app:layout_constraintTop_toBottomOf="@+id/tvBody"
         tools:srcCompat="@tools:sample/avatars" />
+'<ImageView
+    android:id="@+id/ivReply"
+    android:layout_width="15dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="0dp"
+    android:layout_marginTop="5dp"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    app:layout_constraintStart_toStartOf="@+id/tvBody"
+    app:layout_constraintTop_toBottomOf="@+id/media"
+    tools:srcCompat="@tools:sample/avatars" />
+
+<ImageView
+    android:id="@+id/ivRetweet"
+    android:layout_width="15dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    app:layout_constraintStart_toEndOf="@+id/ivReply"
+    app:layout_constraintTop_toTopOf="@id/ivReply"
+    tools:srcCompat="@tools:sample/avatars" />
+
+<ImageView
+    android:id="@+id/ivLike"
+    android:layout_width="15dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    app:layout_constraintStart_toEndOf="@+id/ivRetweet"
+    app:layout_constraintTop_toTopOf="@id/ivReply"
+    tools:srcCompat="@tools:sample/avatars" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,7 +72,7 @@ public class User implements Serializable {
     }
 
     public String getScreenName() {
-        return screenName;
+        return "@" + screenName;
     }
 
     public String getProfileImageURL() {

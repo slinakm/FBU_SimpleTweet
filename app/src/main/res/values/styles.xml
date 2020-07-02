@@ -16,11 +16,6 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

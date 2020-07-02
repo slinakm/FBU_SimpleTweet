@@ -42,6 +42,9 @@
         <activity
             android:name="com.codepath.apps.restclienttemplate.activities.ComposeActivity"
             />
+        <activity
+            android:name="com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity"
+            />
     </application>
 
 </manifest>

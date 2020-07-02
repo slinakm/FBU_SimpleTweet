@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -33,21 +35,27 @@ public class ComposeActivity extends AppCompatActivity {
     com.google.android.material.textfield.TextInputLayout textInputLayout;
     Button btnTweet;
     Context context;
+    ProgressBar pb;
 
     TwitterClient client;
+
+    ActivityComposeBinding mainBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
+
+        mainBinding
+                = ActivityComposeBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
 
         client = TwitterApp.getRestClient(this);
 
         context = this;
-        etCompose = findViewById(R.id.etCompose);
-        textInputLayout = findViewById(R.id.textInputLayout);
+        etCompose = mainBinding.etCompose;
+        textInputLayout = mainBinding.textInputLayout;
         textInputLayout.setCounterMaxLength(MAX_TWEET_LENGTH);
-        btnTweet = findViewById(R.id.btnTweet);
+        btnTweet = mainBinding.btnTweet;
 
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +72,7 @@ public class ComposeActivity extends AppCompatActivity {
                     return;
                 }
 
-                final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
+                pb = mainBinding.pbLoading;
                 pb.setVisibility(ProgressBar.VISIBLE);
                 Toast.makeText(context, tweetContent,
                         Toast.LENGTH_LONG).show();

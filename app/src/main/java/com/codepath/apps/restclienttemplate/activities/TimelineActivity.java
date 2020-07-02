@@ -22,6 +22,7 @@ import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
@@ -47,7 +48,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final boolean TESTING = true;
+    public final boolean TESTING = false;
     public final boolean SAVINGFORTESTING = true;
 
     private final int REQUEST_CODE = 20;
@@ -62,23 +63,31 @@ public class TimelineActivity extends AppCompatActivity {
 
     TweetDao tweetDao;
 
+    ActivityTimelineBinding mainBinding;
+
+    ProgressBar pbLoading;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_timeline);
+        mainBinding
+                = ActivityTimelineBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
 
         client = TwitterApp.getRestClient(this);
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
+        pbLoading = mainBinding.pbLoading;
 
         // Set up RecyclerView and Adapter
-        rvTweets = findViewById(R.id.rvTweets);
+        rvTweets = mainBinding.rvTweets;
         tweetList = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweetList);
 
         LinearLayoutManager rvLinearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(rvLinearLayoutManager);
         rvTweets.setAdapter(adapter);
+
         final EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener
                 = new EndlessRecyclerViewScrollListener(rvLinearLayoutManager) {
             @Override
@@ -93,7 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.addOnScrollListener(endlessRecyclerViewScrollListener);
 
         // Set up Swipe Container
-        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer = mainBinding.swipeContainer;
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -128,8 +137,8 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void loadNextData(final int position) {
-        final ProgressBar pb = findViewById(R.id.pbLoading);
-        pb.setVisibility(ProgressBar.VISIBLE);
+        final ProgressBar pbLoading = mainBinding.pbLoading;
+        pbLoading.setVisibility(ProgressBar.VISIBLE);
 
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
@@ -141,7 +150,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "onSuccess loadNextData: " + json.toString());
-                pb.setVisibility(ProgressBar.INVISIBLE);
+                pbLoading.setVisibility(ProgressBar.INVISIBLE);
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(json.jsonArray);
                     adapter.addAll(tweets);
@@ -153,7 +162,7 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                pb.setVisibility(ProgressBar.INVISIBLE);
+                pbLoading.setVisibility(ProgressBar.INVISIBLE);
                 Log.e(TAG, "onFailure loadNextData: " + response, throwable);
             }
         }, tweetList.get(tweetList.size()-1).getId());
@@ -198,14 +207,13 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateHomeTimeline() {
-        final ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
-        pb.setVisibility(ProgressBar.VISIBLE);
+        pbLoading.setVisibility(ProgressBar.VISIBLE);
 
        if (TESTING) {
            adapter.clear();
            loadItems();
            swipeContainer.setRefreshing(false);
-           pb.setVisibility(ProgressBar.INVISIBLE);
+           pbLoading.setVisibility(ProgressBar.INVISIBLE);
            Log.d(TAG, "populateHomeTimeline: Testing  " + tweetList.toString());
        } else {
            client.getHomeTimelime(new JsonHttpResponseHandler() {
@@ -217,7 +225,7 @@ public class TimelineActivity extends AppCompatActivity {
                        adapter.clear();
                        adapter.addAll(tweetsFromNetwork);
                        swipeContainer.setRefreshing(false);
-                       pb.setVisibility(ProgressBar.INVISIBLE);
+                       pbLoading.setVisibility(ProgressBar.INVISIBLE);
 
                        AsyncTask.execute(new Runnable() {
                            @Override
@@ -231,7 +239,7 @@ public class TimelineActivity extends AppCompatActivity {
                            }
                        });
                    } catch (JSONException e) {
-                       pb.setVisibility(ProgressBar.INVISIBLE);
+                       pbLoading.setVisibility(ProgressBar.INVISIBLE);
                        Log.e(TAG, "onSuccess populateHomeTimeline: Json Exception", e);
                        e.printStackTrace();
                    }
@@ -239,7 +247,7 @@ public class TimelineActivity extends AppCompatActivity {
 
                @Override
                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                   pb.setVisibility(ProgressBar.INVISIBLE);
+                   pbLoading.setVisibility(ProgressBar.INVISIBLE);
                    Log.e(TAG, "onFailure populateHomeTimeline: " + response, throwable);
                }
            });
