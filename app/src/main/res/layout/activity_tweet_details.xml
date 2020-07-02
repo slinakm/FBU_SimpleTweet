@@ -70,6 +70,7 @@
     <ImageView
         android:id="@+id/ivReply"
         android:layout_width="20dp"
+        android:clickable="true"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
@@ -77,29 +78,34 @@
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="@+id/tvBody"
         app:layout_constraintTop_toBottomOf="@+id/tvBody"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/ivRetweet"
         android:layout_width="20dp"
+        android:clickable="true"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ivReply"
         app:layout_constraintTop_toTopOf="@id/ivReply"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/ivLike"
         android:layout_width="20dp"
+        android:clickable="true"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ivRetweet"
         app:layout_constraintTop_toTopOf="@id/ivReply"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:focusable="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

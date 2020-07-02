@@ -43,6 +43,9 @@ public class Tweet implements Serializable {
     @ColumnInfo
     public long userId;
 
+    @ColumnInfo
+    public boolean favorited;
+
     @Ignore
     public User user;
 
@@ -125,6 +128,13 @@ public class Tweet implements Serializable {
         return userId;
     }
 
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
 
     public void setId(long id) {
         this.id = id;

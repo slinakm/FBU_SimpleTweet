@@ -4,17 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
 import com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -24,6 +25,8 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+
+    final public static String INTENT_USER_COMPOSE = "user";
 
     Context context;
     List<Tweet> tweetList;
@@ -88,7 +91,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tweetBinding.getRoot().setOnClickListener(this);
         }
 
-        public void bind(Tweet tweet) {
+        public void bind(final Tweet tweet) {
+
+            // Bind images and text
             tweetBinding.tvBody.setText(tweet.getBody());
             tweetBinding.tvName.setText(tweet.getUser().getName());
             tweetBinding.tvScreenName.setText(tweet.getUser().getScreenName());
@@ -128,7 +133,34 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     transform(new RoundedCorners(60)).
                     into(tweetBinding.ivLike);
 
+            // Set on touch listeners
+
+            tweetBinding.ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: replied!");
+                    Intent intent = new Intent(context, ComposeActivity.class);
+                    intent.putExtra(INTENT_USER_COMPOSE, tweet.user.screenName);
+
+                    context.startActivity(intent);
+                }
+            });
+
+            tweetBinding.ivRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: retweeted!");
+                }
+            });
+
+            tweetBinding.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: favorited!");
+                }
+            });
         }
+
 
         @Override
         public void onClick(View view) {

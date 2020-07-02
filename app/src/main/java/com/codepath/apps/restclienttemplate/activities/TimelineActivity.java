@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -48,7 +50,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final boolean TESTING = false;
+    public final boolean TESTING = true;
     public final boolean SAVINGFORTESTING = true;
 
     private final int REQUEST_CODE = 20;
@@ -100,6 +102,11 @@ public class TimelineActivity extends AppCompatActivity {
             }
         };
         rvTweets.addOnScrollListener(endlessRecyclerViewScrollListener);
+        DividerItemDecoration itemDecoration =
+                new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL);
+        itemDecoration.setDrawable(new ColorDrawable(getResources().getColor(R.color.divider)));
+        rvTweets.addItemDecoration(itemDecoration);
+
 
         // Set up Swipe Container
         swipeContainer = mainBinding.swipeContainer;
@@ -132,8 +139,21 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         // Send API call for new tweets (or used saved tweets if testing)
-//        populateHomeTimeline();
+        populateHomeTimeline();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart: Set up again");
+        super.onRestart();
+        recreate();
     }
 
     private void loadNextData(final int position) {

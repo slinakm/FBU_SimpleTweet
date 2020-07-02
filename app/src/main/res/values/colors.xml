@@ -5,12 +5,13 @@
     <color name="primary_light">@color/light_gray</color>
     <color name="accent">@color/medium_green</color>
     <color name="primary_text">#000000</color>
-    <color name="secondary_text">#212121</color>
+    <color name="secondary_text">#657786</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
     <color name="medium_green">#ff17bf63</color>
-    <color name="medium_gray">#ffaab8c2</color>
+    <color name="medium_gray">#AAB8C2</color>
+    <color name="medium_light_gray">#ffaab8c2</color>
     <color name="medium_gray_30">#4daab8c2</color>
     <color name="medium_gray_50">#80aab8c2</color>
     <color name="light_gray">#ffccd6dd</color>

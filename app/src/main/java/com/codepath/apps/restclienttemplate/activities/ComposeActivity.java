@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -51,12 +52,20 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApp.getRestClient(this);
 
+        // Set up binding views
         context = this;
         etCompose = mainBinding.etCompose;
         textInputLayout = mainBinding.textInputLayout;
         textInputLayout.setCounterMaxLength(MAX_TWEET_LENGTH);
         btnTweet = mainBinding.btnTweet;
 
+
+        if (getIntent().hasExtra(TweetsAdapter.INTENT_USER_COMPOSE)) {
+            String userScreenName = getIntent().getStringExtra(TweetsAdapter.INTENT_USER_COMPOSE);
+            textInputLayout.setPrefixText(userScreenName);
+        }
+
+        // Set button click for tweeting
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

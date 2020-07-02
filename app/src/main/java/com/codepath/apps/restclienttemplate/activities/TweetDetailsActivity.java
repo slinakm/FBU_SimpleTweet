@@ -1,7 +1,10 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
     Tweet tweet;
     ActivityTweetDetailsBinding detailsBinding;
 
+    final static String TAG = "TweetDetailsActivity";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +31,9 @@ public class TweetDetailsActivity extends AppCompatActivity {
         detailsBinding = ActivityTweetDetailsBinding.inflate(getLayoutInflater());
         setContentView(detailsBinding.getRoot());
 
-        Log.d("TweetDetailsActivity", String.format("Showing details for '%s'", tweet.getBody()));
+        Log.d(TAG, String.format("Showing details for '%s'", tweet.getBody()));
 
+        // Set up text and images on view.
         detailsBinding.tvName.setText(tweet.getUser().getName());
         detailsBinding.tvScreenName.setText(tweet.getUser().getScreenName());
         detailsBinding.tvRelativeTime.setText(tweet.getCreatedAt());
@@ -50,10 +55,42 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 transform(new RoundedCorners(60)).
                 into(detailsBinding.ivRetweet);
 
+//        if (tweet.isFavorited()) {
+//            detailsBinding.ivLike.
+//        }
+
         Glide.with(this).
                 load(R.drawable.ic_heart).
                 transform(new RoundedCorners(60)).
                 into(detailsBinding.ivLike);
 
+        detailsBinding.ivReply.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: replied!");
+                Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
+                intent.putExtra("user", tweet.user.screenName);
+                return true;
+            }
+        });
+
+        detailsBinding.ivRetweet.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: retweeted!");
+                return true;
+            }
+        });
+
+        detailsBinding.ivLike.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: favorited!");
+                return true;
+            }
+        });
+
+
     }
+
 }
