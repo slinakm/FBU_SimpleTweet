@@ -48,7 +48,7 @@ The following **additional** features are implemented:
 
 Here's a [walkthrough](https://imgur.com/2qqiH1i) of implemented user stories:
 
-<img src='https://imgur.com/2qqiH1i.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/2qqiH1i.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [Kap](https://getkap.co/).
 
