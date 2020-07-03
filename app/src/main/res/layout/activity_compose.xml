@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,6 +11,10 @@
         android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/medium_gray"
+        android:textColor="@color/secondary_text"
+        app:hintTextColor="@color/secondary_text"
+        android:foregroundTint="@color/medium_gray"
         app:counterEnabled="true"
         app:counterMaxLength="140"
         android:layout_margin="5dp"
@@ -19,6 +24,10 @@
         <EditText
             android:id="@+id/etCompose"
             android:layout_width="match_parent"
+            android:backgroundTint="@color/medium_gray"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:foregroundTint="@color/medium_gray"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/what_s_happening"
@@ -29,6 +38,7 @@
     <Button
         android:id="@+id/btnTweet"
         android:layout_width="wrap_content"
+        android:backgroundTint="@color/twitter_blue"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
