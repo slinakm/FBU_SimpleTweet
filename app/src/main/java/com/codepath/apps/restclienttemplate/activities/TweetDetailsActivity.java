@@ -56,6 +56,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 placeholder(R.drawable.ic_person).
                 into(detailsBinding.ivProfileImage);
 
+        Log.i(TAG, "bind: " + tweet.isRetweeted() + tweet.isFavorited());
+
         if (tweet.isRetweeted()) {
             detailsBinding.ivRetweet.setActivated(true);
         } else {
@@ -104,18 +106,21 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
 
                     Log.d(TAG, "onTouch: retweeted buttom pressed!");
-                    client.retweet(new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
-                            detailsBinding.ivRetweet.setActivated(isActivated);
-                        }
+                    if (TimelineActivity.TESTING) {
+                        Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                    } else {
+                        client.retweet(new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                            Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
-                        }
-                    }, isActivated, tweet.getId());
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
+                            }
+                        }, isActivated, tweet.getId());
+                    }
                     return true;
                 }
                 return false;
@@ -139,18 +144,22 @@ public class TweetDetailsActivity extends AppCompatActivity {
                     }
 
                     Log.d(TAG, "onTouch: favorited!");
-                    client.favoriteTweet(new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            Log.i(TAG, "onSuccess: successfully like or removed like!");
-                            detailsBinding.ivLike.setActivated(isActivated);
-                        }
+                    if (TimelineActivity.TESTING) {
+                        Log.i(TAG, "onSuccess: successfully like or removed like!");
+                    } else {
+                        client.favoriteTweet(new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i(TAG, "onSuccess: successfully like or removed like!");
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                            Log.e(TAG, "onFailure: failed to like or remove like: " + response,  throwable);
-                        }
-                    }, isActivated, tweet.getId());
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "onFailure: failed to like or remove like: " + response,  throwable);
+                            }
+                        }, isActivated, tweet.getId());
+                    }
+
                     return true;
                 }
                 return false;                }

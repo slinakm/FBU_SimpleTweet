@@ -19,6 +19,7 @@ import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
+import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -122,6 +123,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 tweetBinding.media.setVisibility(View.GONE);
             }
 
+            Log.i(TAG, "bind: " + tweet.isRetweeted() + tweet.isFavorited());
 
             Glide.with(context).
                     load(tweet.getUser().getProfileImageURL()).
@@ -178,18 +180,21 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
 
                         Log.d(TAG, "onTouch: retweeted buttom pressed!");
-                        client.retweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
-                                tweetBinding.ivRetweet.setActivated(isActivated);
-                            }
+                        if (TimelineActivity.TESTING) {
+                            Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                        } else {
+                            client.retweet(new JsonHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                    Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                                }
 
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
-                            }
-                        }, isActivated, tweet.getId());
+                                @Override
+                                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                    Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
+                                }
+                            }, isActivated, tweet.getId());
+                        }
                         return true;
                     }
                     return false;
@@ -212,18 +217,22 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         }
 
                         Log.d(TAG, "onTouch: favorited!");
-                        client.favoriteTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Log.i(TAG, "onSuccess: successfully like or removed like!");
-                                tweetBinding.ivLike.setActivated(isActivated);
-                            }
+                        if (TimelineActivity.TESTING) {
+                            Log.i(TAG, "onSuccess: successfully like or removed like!");
+                        } else {
+                            client.favoriteTweet(new JsonHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                    Log.i(TAG, "onSuccess: successfully like or removed like!");
+                                    tweetBinding.ivLike.setActivated(isActivated);
+                                }
 
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.e(TAG, "onFailure: failed to like or remove like: " + response,  throwable);
-                            }
-                        }, isActivated, tweet.getId());
+                                @Override
+                                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                    Log.e(TAG, "onFailure: failed to like or remove like: " + response,  throwable);
+                                }
+                            }, isActivated, tweet.getId());
+                        }
                         return true;
                     }
                     return false;                }

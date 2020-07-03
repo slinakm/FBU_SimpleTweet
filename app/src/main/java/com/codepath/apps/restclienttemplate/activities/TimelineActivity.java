@@ -50,8 +50,8 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final boolean TESTING = true;
-    public final boolean SAVINGFORTESTING = false;
+    public final static boolean TESTING = true;
+    public final static boolean SAVINGFORTESTING = false;
 
     private final int REQUEST_CODE = 20;
     public static final String TAG = "TimelineActivity";
@@ -234,6 +234,7 @@ public class TimelineActivity extends AppCompatActivity {
            loadItems();
            swipeContainer.setRefreshing(false);
            pbLoading.setVisibility(ProgressBar.INVISIBLE);
+           adapter.notifyDataSetChanged();
            Log.d(TAG, "populateHomeTimeline: Testing  " + tweetList.toString());
        } else {
            client.getHomeTimelime(new JsonHttpResponseHandler() {

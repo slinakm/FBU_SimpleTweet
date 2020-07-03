@@ -54,7 +54,7 @@
         tools:text="9 hours ago" />
 
 
-    <TextView
+    <com.codepath.apps.restclienttemplate.LinkifiedTextView
         android:id="@+id/tvBody"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
