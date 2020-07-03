@@ -46,6 +46,9 @@
         <activity
             android:name="com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity"
             />
+        <activity
+            android:name="com.codepath.apps.restclienttemplate.activities.ProfileActivity"
+            />
     </application>
 
 </manifest>

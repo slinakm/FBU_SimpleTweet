@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,8 +51,8 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final static boolean TESTING = true;
-    public final static boolean SAVINGFORTESTING = false;
+    public final static boolean TESTING = false;
+    public final static boolean SAVINGFORTESTING = true;
 
     private final int REQUEST_CODE = 20;
     public static final String TAG = "TimelineActivity";
@@ -69,6 +70,8 @@ public class TimelineActivity extends AppCompatActivity {
 
     ProgressBar pbLoading;
 
+//    Toolbar toolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,9 @@ public class TimelineActivity extends AppCompatActivity {
         mainBinding
                 = ActivityTimelineBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
+
+//        toolbar = mainBinding.toolbarMain;
+//        setSupportActionBar(toolbar);
 
         client = TwitterApp.getRestClient(this);
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();

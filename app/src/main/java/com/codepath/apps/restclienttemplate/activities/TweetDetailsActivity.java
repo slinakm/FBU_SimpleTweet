@@ -19,6 +19,7 @@ import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.parceler.Parcels;
@@ -70,99 +71,92 @@ public class TweetDetailsActivity extends AppCompatActivity {
             detailsBinding.ivLike.setActivated(false);
         }
 
-        // Set on touch listeners
-        detailsBinding.ivReply.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+        // Set on click listeners
+        detailsBinding.ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    final boolean isActivated = !detailsBinding.ivReply.isActivated();
-                    detailsBinding.ivReply.setActivated(isActivated);
-
-                    Log.d(TAG, "onTouch: replied!");
-                    Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
-                    intent.putExtra(TweetsAdapter.INTENT_USER_COMPOSE, tweet.user.getScreenName());
-
-                    TweetDetailsActivity.this.startActivity(intent);
-                    return true;
-                }
-                return false;
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: " + tweet.getUser().getName());
+                Intent intent = new Intent(TweetDetailsActivity.this, ProfileActivity.class);
+                intent.putExtra(User.class.getSimpleName(), Parcels.wrap(tweet.getUser()));
+                startActivity(intent);
             }
         });
 
-        detailsBinding.ivRetweet.setOnTouchListener(new View.OnTouchListener() {
+        detailsBinding.ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.performClick();
+            public void onClick(View view) {
+                final boolean isActivated = !detailsBinding.ivReply.isActivated();
+                detailsBinding.ivReply.setActivated(isActivated);
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    final boolean isActivated = !detailsBinding.ivRetweet.isActivated();
-                    detailsBinding.ivRetweet.setActivated(isActivated);
-                    tweet.setRetweeted(isActivated);
+                Log.d(TAG, "onTouch: replied!");
+                Intent intent = new Intent(TweetDetailsActivity.this, ComposeActivity.class);
+                intent.putExtra(TweetsAdapter.INTENT_USER_COMPOSE, tweet.user.getScreenName());
 
-                    if (isActivated != tweet.isRetweeted()) {
-                        Log.e(TAG, "onTouch: state of icon should be the same as the state of tweet");
-                    }
-
-
-                    Log.d(TAG, "onTouch: retweeted buttom pressed!");
-                    if (TimelineActivity.TESTING) {
-                        Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
-                    } else {
-                        client.retweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
-                            }
-                        }, isActivated, tweet.getId());
-                    }
-                    return true;
-                }
-                return false;
+                TweetDetailsActivity.this.startActivity(intent);
             }
         });
 
-        detailsBinding.ivLike.setOnTouchListener(new View.OnTouchListener() {
+        detailsBinding.ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.performClick();
+            public void onClick(View view) {
+                final boolean isActivated = !detailsBinding.ivRetweet.isActivated();
+                detailsBinding.ivRetweet.setActivated(isActivated);
+                tweet.setRetweeted(isActivated);
 
-                if (motionEvent.getAction() == motionEvent.ACTION_UP) {
-                    Log.i(TAG, "onTouch: " + tweet.isFavorited());
-
-                    final boolean isActivated = !detailsBinding.ivLike.isActivated();
-                    detailsBinding.ivLike.setActivated(isActivated);
-                    tweet.setFavorited(isActivated);
-
-                    if (isActivated != tweet.isFavorited()) {
-                        Log.e(TAG, "onTouch: state of icon should be the same as the state of tweet");
-                    }
-
-                    Log.d(TAG, "onTouch: favorited!");
-                    if (TimelineActivity.TESTING) {
-                        Log.i(TAG, "onSuccess: successfully like or removed like!");
-                    } else {
-                        client.favoriteTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Log.i(TAG, "onSuccess: successfully like or removed like!");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.e(TAG, "onFailure: failed to like or remove like: " + response,  throwable);
-                            }
-                        }, isActivated, tweet.getId());
-                    }
-
-                    return true;
+                if (isActivated != tweet.isRetweeted()) {
+                    Log.e(TAG, "onTouch: state of icon should be the same as the state of tweet");
                 }
-                return false;                }
+
+
+                Log.d(TAG, "onTouch: retweeted buttom pressed!");
+                if (TimelineActivity.TESTING) {
+                    Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                } else {
+                    client.retweet(new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            Log.i(TAG, "onSuccess: successfully retweeted or removed retweet!");
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            Log.e(TAG, "onFailure: failed to retweet or remove retweet: " + response,  throwable);
+                        }
+                    }, isActivated, tweet.getId());
+                }
+            }
+        });
+
+        detailsBinding.ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onTouch: " + tweet.isFavorited());
+
+                final boolean isActivated = !detailsBinding.ivLike.isActivated();
+                detailsBinding.ivLike.setActivated(isActivated);
+                tweet.setFavorited(isActivated);
+
+                if (isActivated != tweet.isFavorited()) {
+                    Log.e(TAG, "onTouch: state of icon should be the same as the state of tweet");
+                }
+
+                Log.d(TAG, "onTouch: favorited!");
+                if (TimelineActivity.TESTING) {
+                    Log.i(TAG, "onSuccess: successfully like or removed like!");
+                } else {
+                    client.favoriteTweet(new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            Log.i(TAG, "onSuccess: successfully like or removed like!");
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            Log.e(TAG, "onFailure: failed to like or remove like: " + response, throwable);
+                        }
+                    }, isActivated, tweet.getId());
+                }
+            }
         });
 
 
