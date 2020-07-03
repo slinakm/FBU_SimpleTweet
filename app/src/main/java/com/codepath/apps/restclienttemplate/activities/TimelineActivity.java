@@ -70,7 +70,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     ProgressBar pbLoading;
 
-//    Toolbar toolbar;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,8 +80,8 @@ public class TimelineActivity extends AppCompatActivity {
                 = ActivityTimelineBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
 
-//        toolbar = mainBinding.toolbarMain;
-//        setSupportActionBar(toolbar);
+        toolbar = mainBinding.toolbarMain;
+        setSupportActionBar(toolbar);
 
         client = TwitterApp.getRestClient(this);
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
