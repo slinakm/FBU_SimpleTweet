@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuItemImpl;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +22,7 @@ import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
+import com.codepath.apps.restclienttemplate.activities.ComposeFragment;
 import com.codepath.apps.restclienttemplate.activities.ProfileActivity;
 import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity;
@@ -37,14 +41,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     final public static String INTENT_USER_COMPOSE = "user";
 
-    Context context;
+    AppCompatActivity context;
     List<Tweet> tweetList;
     TwitterClient client;
 
     final String TAG = "TweetsAdapter";
 
     // Pass in context and list of tweets
-    public TweetsAdapter(Context context, List<Tweet> tweetList) {
+    public TweetsAdapter(AppCompatActivity context, List<Tweet> tweetList) {
         this.context = context;
         this.tweetList = tweetList;
         client = TwitterApp.getRestClient(context);
@@ -156,10 +160,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     tweetBinding.ivReply.setActivated(isActivated);
 
                     Log.d(TAG, "onTouch: replied!");
-                    Intent intent = new Intent(context, ComposeActivity.class);
-                    intent.putExtra(INTENT_USER_COMPOSE, tweet.user.getScreenName());
+//                    Intent intent = new Intent(context, ComposeActivity.class);
+//                    intent.putExtra(INTENT_USER_COMPOSE, tweet.user.getScreenName());
+//                    context.startActivity(intent);
 
-                    context.startActivity(intent);
+                    FragmentManager fm = context.getSupportFragmentManager();
+                    ComposeFragment alertDialog = ComposeFragment.newInstance();
+                    alertDialog.show(fm, "fragment_alert");
                 }
             });
 

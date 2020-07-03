@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +52,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final static boolean TESTING = true;
+    public final static boolean TESTING = false;
     public final static boolean SAVINGFORTESTING = true;
 
     private final int REQUEST_CODE = 20;
@@ -212,8 +213,11 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.compose) {
-            Intent intent = new Intent(this, ComposeActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+//            Intent intent = new Intent(this, ComposeActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE);
+            FragmentManager fm = getSupportFragmentManager();
+            ComposeFragment alertDialog = ComposeFragment.newInstance();
+            alertDialog.show(fm, "fragment_alert");
             return true;
         }
         return super.onOptionsItemSelected(item);
