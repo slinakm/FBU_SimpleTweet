@@ -82,6 +82,16 @@ public class TweetDetailsActivity extends AppCompatActivity {
             }
         });
 
+        detailsBinding.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: " + tweet.getUser().getName());
+                Intent intent = new Intent(TweetDetailsActivity.this, ProfileActivity.class);
+                intent.putExtra(User.class.getSimpleName(), Parcels.wrap(tweet.getUser()));
+                startActivity(intent);
+            }
+        });
+
         detailsBinding.ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

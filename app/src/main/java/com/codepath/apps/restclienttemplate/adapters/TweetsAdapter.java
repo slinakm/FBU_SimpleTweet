@@ -19,10 +19,12 @@ import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.activities.ComposeActivity;
+import com.codepath.apps.restclienttemplate.activities.ProfileActivity;
 import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.parceler.Parcels;
@@ -132,7 +134,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     into(tweetBinding.ivProfileImage);
 
             Log.i(TAG, "bind: " + tweet.isRetweeted() + tweet.isFavorited());
-            
+
             if (tweet.isRetweeted()) {
                 tweetBinding.ivRetweet.setActivated(true);
             } else {
@@ -223,6 +225,26 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                             }
                         }, isActivated, tweet.getId());
                     }
+                }
+            });
+
+            tweetBinding.tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + tweet.getUser().getName());
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.putExtra(User.class.getSimpleName(), Parcels.wrap(tweet.getUser()));
+                    context.startActivity(intent);
+                }
+            });
+
+            tweetBinding.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + tweet.getUser().getName());
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.putExtra(User.class.getSimpleName(), Parcels.wrap(tweet.getUser()));
+                    context.startActivity(intent);
                 }
             });
         }
