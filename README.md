@@ -48,10 +48,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/x5XS3BJ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-Here's an older walkthrough:
-<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/showicon_twitter.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/2qqiH1i.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [Kap](https://getkap.co/).
 
