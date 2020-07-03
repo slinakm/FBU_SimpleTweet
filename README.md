@@ -55,6 +55,8 @@ GIF created with [Kap](https://getkap.co/).
 
 Describe any challenges encountered while building the app.
 
+I had some trouble getting the icons to work properly.
+
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
