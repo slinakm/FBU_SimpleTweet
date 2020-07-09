@@ -50,15 +50,15 @@ Here's a [walkthrough](https://imgur.com/2qqiH1i) of implemented user stories:
 
 <img src='https://i.imgur.com/2qqiH1i.gif' title='Quick gif' width="48" alt='Unfortunately, it is not showing up, but use this link: https://i.imgur.com/2qqiH1i.gif' />
 
-<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/no_internet_twitter.gif' title='twitter working without internet' width="48" alt='' />
+<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/no_internet_twitter.gif' title='twitter working without internet' width="200" alt='' />
 
-<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/twitter_tweeted.gif' title='twitter tweeting and going to links' width="48" alt='' />
+<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/twitter_tweeted.gif' title='twitter tweeting and going to links' width="200" alt='' />
 
 The following gifs are of my application before the disappearing top bar was added. I added these gifs because they show embedded media. I was not able to find tweets with embedded media before I was rate-limited in my newer gifs. 
 
-<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/portrait_twitter.gif' title='older version with embedded media' width="48" alt='Unfortunately, it is not showing up, but use this link: https://github.com/slinakm/FBU_SimpleTweet/blob/master/portrait_twitter.gif' />
+<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/portrait_twitter.gif' title='older version with embedded media' width="200" alt='Unfortunately, it is not showing up, but use this link: https://github.com/slinakm/FBU_SimpleTweet/blob/master/portrait_twitter.gif' />
 
-<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/showicon_twitter.gif' title='older verions that shows icon' width="48" alt='' />
+<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/showicon_twitter.gif' title='older verions that shows icon' width="200" alt='' />
 
 
 GIF created with [Kap](https://getkap.co/).
