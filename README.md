@@ -50,6 +50,11 @@ Here's a [walkthrough](https://imgur.com/2qqiH1i) of implemented user stories:
 
 <img src='https://i.imgur.com/2qqiH1i.gif' title='Unfortunately, it is not showing up, but use this link: https://i.imgur.com/2qqiH1i.gif' width='' alt='Unfortunately, it is not showing up, but use this link: https://i.imgur.com/2qqiH1i.gif' />
 
+<img src='https://github.com/slinakm/FBU_SimpleTweet/blob/master/portrait_twitter.gif
+' title='Unfortunately, it is not showing up, but use this link: https://i.imgur.com/2qqiH1i.gif' width='' alt='Unfortunately, it is not showing up, but use this link: https://i.imgur.com/2qqiH1i.gif' />
+
+
+
 GIF created with [Kap](https://getkap.co/).
 
 ## Notes
