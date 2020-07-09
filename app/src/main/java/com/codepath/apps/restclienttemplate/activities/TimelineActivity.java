@@ -51,8 +51,15 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    public final static boolean TESTING = true;
-    public final static boolean SAVINGFORTESTING = true;
+
+    /**
+     *  Note: Testing must be false when Twitter did not rate limit
+     *     or when starting on new device. When testing, device only receives tweets
+     *     that were serialized earlier. If device was never used, then no tweets
+     *     will show up. Testing was implemented because I was rate limited too frequently.
+     */
+    public final static boolean TESTING = false;
+    public final static boolean SAVINGFORTESTING = false;
 
     private final int REQUEST_CODE = 20;
     public static final String TAG = "TimelineActivity";
@@ -224,6 +231,7 @@ public class TimelineActivity extends AppCompatActivity {
         if (requestCode == this.REQUEST_CODE
                 && resultCode == RESULT_OK) {
             // Get data from tweet and update RV with new tweet
+            Log.i(TAG, "onActivityResult: success");
             Tweet tweet = Parcels.unwrap(data.getParcelableExtra(Tweet.class.getSimpleName()));
             tweetList.add(0, tweet);
             adapter.notifyItemInserted(0);
